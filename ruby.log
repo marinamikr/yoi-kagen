@@ -1,0 +1,64 @@
+nohup: ignoring input
+== Sinatra (v3.2.0) has taken the stage on 8080 for development with backup from Puma
+Puma starting in single mode...
+* Puma version: 6.6.1 ("Return to Forever")
+* Ruby version: ruby 3.4.1 (2024-12-25 revision 48d4efcb85) +PRISM [x86_64-linux]
+*  Min threads: 0
+*  Max threads: 5
+*  Environment: development
+*          PID: 12253
+* Listening on http://127.0.0.1:8080
+* Listening on http://[::1]:8080
+Use Ctrl-C to stop
+126.143.186.89 - - [11/Mar/2026:15:13:50 +0000] "GET / HTTP/1.1" 200 2474 0.0174
+D, [2026-03-11T15:13:56.041050 #12253] DEBUG -- omniauth: (line) Request phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:13:56 +0000] "GET /auth/line HTTP/1.1" 302 276 0.0060
+147.92.149.169 - - [11/Mar/2026:15:14:05 +0000] "POST /callback HTTP/1.1" 200 2 0.2174
+147.92.149.169 - - [11/Mar/2026:15:14:42 +0000] "POST /callback HTTP/1.1" 200 2 1.9339
+D, [2026-03-11T15:14:45.228637 #12253] DEBUG -- omniauth: (line) Callback phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:14:45 +0000] "GET /auth/line/callback?code=2pSxwzS6wk2utKARA2oT&state=9991c759a5c94d0156aecbbc516fd7c78a8103e24449fe08 HTTP/1.1" 302 - 0.0692
+126.143.186.89 - - [11/Mar/2026:15:14:45 +0000] "GET /mypage HTTP/1.1" 200 3157 0.0050
+126.143.186.89 - - [11/Mar/2026:15:15:03 +0000] "GET / HTTP/1.1" 200 847 0.0035
+126.143.186.89 - - [11/Mar/2026:15:15:03 +0000] "GET /css/style.css HTTP/1.1" 200 10508 0.0024
+126.143.186.89 - - [11/Mar/2026:15:15:03 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0017
+D, [2026-03-11T15:15:04.697213 #12253] DEBUG -- omniauth: (line) Request phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:15:04 +0000] "GET /auth/line HTTP/1.1" 302 276 0.0029
+D, [2026-03-11T15:15:06.498855 #12253] DEBUG -- omniauth: (line) Callback phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:15:06 +0000] "GET /auth/line/callback?state=b9424463586d71c2848db1716b0ff2d787e74879cbcffa1a&liffClientId=2009402482&liffRedirectUri=https%3A%2F%2Facrologic-unglobularly-nikolas.ngrok-free.dev%2Fauth%2Fline%2Fcallback&code=dJlp9gpmITuTYNpAzvRt HTTP/1.1" 302 - 0.3152
+126.143.186.89 - - [11/Mar/2026:15:15:06 +0000] "GET /mypage HTTP/1.1" 200 3157 0.0040
+126.143.186.89 - - [11/Mar/2026:15:15:07 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0016
+126.143.186.89 - - [11/Mar/2026:15:15:11 +0000] "GET /week_meter HTTP/1.1" 200 7302 0.0079
+126.143.186.89 - - [11/Mar/2026:15:15:11 +0000] "GET /images/lemon.png HTTP/1.1" 200 352672 0.0015
+126.143.186.89 - - [11/Mar/2026:15:15:11 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0017
+126.143.186.89 - - [11/Mar/2026:15:15:13 +0000] "GET /current HTTP/1.1" 200 2509 0.0044
+126.143.186.89 - - [11/Mar/2026:15:15:14 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+126.143.186.89 - - [11/Mar/2026:15:15:15 +0000] "GET /friends HTTP/1.1" 200 5175 0.0072
+126.143.186.89 - - [11/Mar/2026:15:15:15 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0016
+126.143.186.89 - - [11/Mar/2026:15:15:19 +0000] "GET /mypage HTTP/1.1" 200 3157 0.0038
+126.143.186.89 - - [11/Mar/2026:15:15:19 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+D, [2026-03-11T15:15:21.034385 #12253] DEBUG -- omniauth: (google_oauth2) Request phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:15:21 +0000] "GET /auth/google_oauth2 HTTP/1.1" 302 421 0.0024
+126.143.186.89 - - [11/Mar/2026:15:15:24 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0016
+126.143.186.89 - - [11/Mar/2026:15:15:26 +0000] "GET /current HTTP/1.1" 200 2509 0.0040
+126.143.186.89 - - [11/Mar/2026:15:15:26 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+126.143.186.89 - - [11/Mar/2026:15:15:27 +0000] "GET /friends HTTP/1.1" 200 5175 0.0060
+126.143.186.89 - - [11/Mar/2026:15:15:27 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+126.143.186.89 - - [11/Mar/2026:15:15:32 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0016
+126.143.186.89 - - [11/Mar/2026:15:15:33 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0014
+147.92.149.169 - - [11/Mar/2026:15:15:44 +0000] "POST /callback HTTP/1.1" 200 2 1.2977
+126.143.186.89 - - [11/Mar/2026:15:15:50 +0000] "GET / HTTP/1.1" 200 2474 0.0032
+126.143.186.89 - - [11/Mar/2026:15:15:50 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+D, [2026-03-11T15:15:51.384418 #12253] DEBUG -- omniauth: (line) Request phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:15:51 +0000] "GET /auth/line HTTP/1.1" 302 276 0.0024
+D, [2026-03-11T15:15:52.966294 #12253] DEBUG -- omniauth: (line) Callback phase initiated.
+126.143.186.89 - - [11/Mar/2026:15:15:53 +0000] "GET /auth/line/callback?state=c10a58c8b8c17a5c56eec35f30d53797aa1367634563330f&liffClientId=2009402482&liffRedirectUri=https%3A%2F%2Facrologic-unglobularly-nikolas.ngrok-free.dev%2Fauth%2Fline%2Fcallback&code=jKl26mAO74Uqpzg9mzUZ HTTP/1.1" 302 - 0.3038
+126.143.186.89 - - [11/Mar/2026:15:15:53 +0000] "GET /mypage HTTP/1.1" 200 3157 0.0041
+126.143.186.89 - - [11/Mar/2026:15:15:53 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0018
+126.143.186.89 - - [11/Mar/2026:15:15:55 +0000] "GET /current HTTP/1.1" 200 2509 0.0040
+126.143.186.89 - - [11/Mar/2026:15:15:55 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+126.143.186.89 - - [11/Mar/2026:15:16:00 +0000] "GET /current HTTP/1.1" 200 2509 0.0043
+126.143.186.89 - - [11/Mar/2026:15:16:00 +0000] "GET /favicon.ico HTTP/1.1" 404 448 0.0015
+147.92.149.169 - - [11/Mar/2026:21:29:08 +0000] "POST /callback HTTP/1.1" 200 2 3.4802
+147.92.149.169 - - [12/Mar/2026:02:28:24 +0000] "POST /callback HTTP/1.1" 200 2 1.3863
+147.92.149.169 - - [12/Mar/2026:02:29:06 +0000] "POST /callback HTTP/1.1" 200 2 1.8014
+147.92.149.169 - - [12/Mar/2026:05:57:08 +0000] "POST /callback HTTP/1.1" 200 2 2.2899

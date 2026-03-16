@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yoi-kagen</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <% if session[:line_user_id] %>
+      <div id="hamburger-menu" class="overlay-menu">
+        <div class="menu-header-bar">
+          <span class="menu-close" onclick="toggleMenu()">✖</span>
+          <span class="menu-logo">Yoi-kagen</span>
+          <img src="<%= session[:user_image] %>" class="menu-user-icon" alt="アイコン">
+        </div>
+        <ul class="menu-links">
+          <li><a href="/current">現在の酔い加減</a></li>
+          <li><a href="/week_meter">今週の酔い度メーター</a></li>
+          <li><a href="/friends">友達一覧</a></li>
+          <li><a href="/mypage">アカウント設定</a></li>
+        </ul>
+      </div>
+
+      <div class="header-mobile">
+        <div class="hamburger-icon" onclick="toggleMenu()">≡</div>
+        <a href="/current" class="header-logo-link">
+          <div class="header-logo">Yoi-kagen 🍻</div>
+        </a>
+        <div style="width: 24px;"></div> 
+      </div>
+
+      <div class="header-pc">
+        <a href="/dashboard" class="header-logo-link">
+          <div class="header-logo">Yoi-kagen 🍻</div>
+        </a>
+        
+        <div class="header-pc-nav">
+          <a href="/current">現在の酔い加減</a>
+          <a href="/dashboard">ダッシュボード</a>
+        </div>
+
+        <div class="header-right">
+          <a href="/mypage" class="header-profile-link">
+            <img src="<%= session[:user_image] %>" alt="icon" class="header-profile-img">
+            <span class="header-profile-name"><%= session[:user_name] %></span>
+          </a>
+        </div>
+      </div>
+
+    <% else %>
+      <div class="header-mobile header-center">
+        <span class="header-logo">Yoi-kagen 🍻</span>
+      </div>
+    <% end %>
+
+    <%= yield %>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('hamburger-menu');
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

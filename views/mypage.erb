@@ -1,0 +1,32 @@
+<div class="mypage-container">
+  
+  <div class="profile-card">
+    <div class="profile-header">プロフィール</div>
+
+   <div class="profile-content">
+      <img src="<%= session[:user_image] %>" class="profile-img" alt="プロフィール画像">
+
+      <div class="profile-info">
+        <h2 class="profile-name"><%= session[:user_name] %></h2>
+        <p class="profile-id">ID:<%= session[:line_user_id] ? session[:line_user_id][0..5] : "未設定" %></p>
+        
+        <% if session[:google_token] %>
+          <p class="profile-status">GoogleAccount:連携済み✅</p>
+        <% else %>
+          <p class="profile-status">GoogleAccount:未認証</p>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="profile-actions">
+      <% if session[:google_token] %>
+        <a href="#" class="btn-profile-action" style="opacity: 0.5; cursor: default;">Google連携完了 🎉</a>
+      <% else %>
+        <a href="/auth/google_oauth2" class="btn-profile-action">Googleアカウント連携</a>
+      <% end %>
+      
+      <a href="/logout" class="btn-profile-action">ログアウト</a>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,69 @@
+<% if @risky_events && @risky_events.any? %>
+  <div class="dashboard-container" style="padding-bottom: 0;">
+    <div class="dashboard-card alert-card" style="max-width: 100%;">
+      <h2 class="alert-title">⚠️ 飲み過ぎ注意！！！</h2>
+      <p class="alert-desc">過去のデータから、酔いメーターが高い予定を検知しました！</p>
+      
+      <div class="alert-list">
+        <% @risky_events.each do |event| %>
+          <div class="alert-item">
+            <div>
+              <div class="alert-item-title"><%= event["title"] %></div>
+              <div class="alert-item-time">開始: <%= event["start_time"] %></div>
+            </div>
+            <div class="alert-item-score">
+              過去最大 <%= event["risk_score"] %>%
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="dashboard-container" <% if @risky_events && @risky_events.any? %>style="padding-top: 30px;"<% end %>>
+  
+  <div class="dashboard-card meter-card">
+    <h2 class="card-title">今週の酔い度メーター</h2>
+    <div class="week-meter-chart">
+      <% days_of_week_ja = ['月', '火', '水', '木', '金', '土', '日'] %>
+      <% days_of_week_ja.each do |day| %>
+        <% score = @weekly_scores[day] %>
+        <% lemon_count = score / 5 %>
+        
+        <div class="bar-column">
+          <div class="lemon-stack">
+            <% lemon_count.times do %>
+              <img src="/images/lemon.png" alt="🍋" class="lemon-icon">
+            <% end %>
+          </div>
+          <span class="day-label"><%= day %></span>
+          <span class="score-label"><%= score %>%</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="dashboard-card friends-card">
+    <h2 class="card-title">友達一覧</h2>
+    <div class="friends-list dashboard-friends">
+      <% @friends_data.each do |friend| %>
+        <div class="friend-item">
+          <img src="<%= friend[:image] %>" class="friend-img" alt="icon">
+          <div class="friend-info">
+            <div class="friend-name"><%= friend[:name] %></div>
+            <div class="friend-score <%= 'score-low' if friend[:score] <= 40 %>"><%= friend[:score] %>%</div>
+          </div>
+          
+          <% if friend[:score] <= 40 && friend[:id] != session[:line_user_id] %>
+            <form action="/invite" method="post" class="invite-form">
+              <input type="hidden" name="line_user_id" value="<%= friend[:id] %>">
+              <button type="submit" class="btn-invite">飲みに誘う！</button>
+            </form>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</div>

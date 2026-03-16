@@ -1,0 +1,25 @@
+<div class="friends-page-container">
+  <h2 class="page-title">友達一覧</h2>
+
+  <div class="friends-list">
+    <% @friends_data.each do |friend| %>
+      <div class="friend-item">
+        <img src="<%= friend[:image] %>" class="friend-img" alt="icon">
+        
+        <div class="friend-info">
+          <div class="friend-name"><%= friend[:name] %></div>
+          <div class="friend-score <%= 'score-low' if friend[:score] <= 40 %>">
+            <%= friend[:score] %>%
+          </div>
+        </div>
+        
+        <% if friend[:score] <= 40 && friend[:id] != session[:line_user_id] %>
+          <form action="/invite" method="post" class="invite-form">
+            <input type="hidden" name="line_user_id" value="<%= friend[:id] %>">
+            <button type="submit" class="btn-invite">飲みに誘う！</button>
+          </form>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

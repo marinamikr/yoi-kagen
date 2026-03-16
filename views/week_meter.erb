@@ -1,0 +1,44 @@
+<div class="week-meter-page-container">
+
+  <% if @risky_events && @risky_events.any? %>
+    <div class="dashboard-card alert-card">
+      <h2 class="alert-title">⚠️ 飲み過ぎ注意！！！</h2>
+      <p class="alert-desc">過去のデータから、酔いメーターが高い予定を検知しました！</p>
+      
+      <div class="alert-list">
+        <% @risky_events.each do |event| %>
+          <div class="alert-item">
+            <div>
+              <div class="alert-item-title"><%= event["title"] %></div>
+              <div class="alert-item-time">開始: <%= event["start_time"] %></div>
+            </div>
+            <div class="alert-item-score">
+              過去最大 <%= event["risk_score"] %>%
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <h2 class="current-yoi-title">今週の酔い度メーター</h2>
+  
+  <div class="week-meter-chart">
+    <% days_of_week_ja = ['月', '火', '水', '木', '金', '土', '日'] %>
+    <% days_of_week_ja.each do |day| %>
+      <% score = @weekly_scores[day] %>
+      
+      <% lemon_count = score / 5 %>
+      
+      <div class="bar-column">
+        <div class="lemon-stack">
+          <% lemon_count.times do %>
+            <img src="/images/lemon.png" alt="レモン" class="lemon-icon">
+          <% end %>
+        </div>
+        <span class="day-label"><%= day %></span>
+        <span class="score-label"><%= score %>%</span>
+      </div>
+    <% end %>
+  </div>
+</div>
