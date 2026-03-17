@@ -17,7 +17,9 @@ gem 'httparty'
 gem 'json'
 gem 'ruby-openai'
 
-gem 'sqlite3', '~> 1.6'
+group :development do
+  gem 'sqlite3', '~> 1.6'
+end
 
 gem 'omniauth'
 gem 'omniauth-line'

@@ -182,7 +182,7 @@ get '/friends' do
                             .order(created_at: :desc).first
                             
                             display_name = user.name.nil? || user.name.empty? ? "未ログインの友達" : user.name
-    display_image = user.profile_image_url.nil? || user.profile_image_url.empty? ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : user.profile_image_url
+display_image = user.profile_image_url.present? ? user.profile_image_url : "/images/logo.png"
     {
       name: user.name,
       image: user.profile_image_url,
@@ -236,8 +236,8 @@ get '/dashboard' do
                             .order(created_at: :desc).first
                             
     display_name = user.name.nil? || user.name.empty? ? "未ログインの友達" : user.name
-    display_image = user.profile_image_url.nil? || user.profile_image_url.empty? ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : user.profile_image_url
-    {
+display_image = user.profile_image_url.present? ? user.profile_image_url : "/images/logo.png"
+{
       name: display_name,  
       image: display_image, 
       score: latest_log ? latest_log.yoi_score : 0,
@@ -525,11 +525,4 @@ scheduler.every '10m' do
       puts "❌ #{user.name} の自動通知チェックでエラー: #{e.message}"
     end
   end
-end
-
-get '/delete_test_user' do
-  # 名前が「nomitomo」のユーザーを探して、データベースから完全に削除！
-  User.where(name: "nomitomo").destroy_all
-  
-  "🗑️ nomitomoさんのデータを削除しました！ブラウザの戻るボタンで戻ってください。"
 end
