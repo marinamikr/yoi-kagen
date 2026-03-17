@@ -8,6 +8,8 @@ require 'dotenv/load'
 require 'sinatra/activerecord'
 require 'google/apis/calendar_v3'
 require './models'
+require 'rufus-scheduler'
+require 'net/http'
 
 enable :sessions
 set :session_secret, '8b4b1a41a4a2c5a2c91c89f5c490a6e344e21a2d48344e99f5a0cfb2e2d9b23f'
@@ -21,6 +23,8 @@ use OmniAuth::Builder do
   
   provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'], {
     scope: 'email, profile, https://www.googleapis.com/auth/calendar.events',
+    prompt: 'consent',
+    access_type: 'offline',
     provider_ignores_state: true
   }
 end
@@ -49,7 +53,18 @@ end
 
 # Google連携が完了したあとの処理
 get '/auth/google_oauth2/callback' do
+ redirect '/' if session[:line_user_id].nil?
+
   auth_data = request.env['omniauth.auth']
+  user = User.find_by(line_user_id: session[:line_user_id])
+  
+  if user
+    user.update(
+      google_token: auth_data.credentials.token,
+      google_refresh_token: auth_data.credentials.refresh_token || user.google_refresh_token
+    )
+  end
+
   session[:google_token] = auth_data.credentials.token
   redirect '/mypage'
 end
@@ -161,7 +176,7 @@ end
 
 get '/friends' do
   redirect '/' if session[:line_user_id].nil?
-  @friends_data = User.all.map do |user|
+  @friends_data = User.where.not(name: nil).where.not(name: "").map do |user|
     latest_log = AnalysisLog.where(line_user_id: user.line_user_id)
                             .where("created_at > ?", Time.now.utc - 2*60*60)
                             .order(created_at: :desc).first
@@ -185,7 +200,15 @@ post '/invite' do
     text: "#{session[:user_name]}さんからお誘いです！\n「飲みに行こうよ！」"
   }
   client.push_message(target_id, message)
-  redirect '/dashboard'
+user_agent = request.user_agent.to_s.downcase
+  
+  is_mobile = user_agent.match?(/iphone|android.+mobile|windows phone/)
+
+  if is_mobile
+    redirect '/week_meter'
+  else
+    redirect '/dashboard'
+  end
 end
 
 get '/dashboard' do
@@ -207,7 +230,7 @@ get '/dashboard' do
     @weekly_scores[day_name] = max_score
   end
 
-  @friends_data = User.all.map do |user|
+  @friends_data = User.where.not(name: nil).where.not(name: "").map do |user|
     latest_log = AnalysisLog.where(line_user_id: user.line_user_id)
                             .where("created_at > ?", Time.now.utc - 2*60*60)
                             .order(created_at: :desc).first
@@ -223,6 +246,8 @@ get '/dashboard' do
   end
 
   @risky_events = []
+  user = User.find_by(line_user_id: session[:line_user_id])
+  current_token = user ? (refresh_google_token(user) || user.google_token || session[:google_token]) : session[:google_token]
   if session[:google_token]
     begin
       service = Google::Apis::CalendarV3::CalendarService.new
@@ -305,6 +330,25 @@ def client
   }
 end
 
+def refresh_google_token(user)
+  return nil unless user.google_refresh_token
+
+  uri = URI.parse("https://oauth2.googleapis.com/token")
+  response = Net::HTTP.post_form(uri, {
+    "client_id" => ENV['GOOGLE_CLIENT_ID'],
+    "client_secret" => ENV['GOOGLE_CLIENT_SECRET'],
+    "refresh_token" => user.google_refresh_token,
+    "grant_type" => "refresh_token"
+  })
+  
+  data = JSON.parse(response.body)
+  if data["access_token"]
+    user.update(google_token: data["access_token"])
+    return data["access_token"]
+  end
+  nil
+end
+
 def openai_client
   @openai_client ||= OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
 end
@@ -360,11 +404,11 @@ post '/callback' do
             end
           end
           next
-        elsif user_text == "/nomikai"
+        elsif ["/nomikai", "/飲み会", "/のみかい"].include?(user_text.delete(" 　"))
           chat_session.update(status: "on")
           client.reply_message(event['replyToken'], { type: 'text', text: "🍻 グループの酔い加減測定モード【ON】🍻\nどんどん喋ってね！" })
           next
-        elsif user_text == "/neru"
+        elsif ["/neru", "/寝る", "/ねる"].include?(user_text.delete(" 　"))
           chat_session.update(status: "off")
           client.reply_message(event['replyToken'], { type: 'text', text: "😴 酔い加減測定モード【OFF】😴\nねなさい！！" })
           next
@@ -415,4 +459,77 @@ post '/callback' do
     end
   end
   "OK"
+end
+
+##通知
+scheduler = Rufus::Scheduler.new
+
+scheduler.every '10m' do
+  puts "🤖 [自動] カレンダーチェックします"
+  
+  User.where.not(google_token: nil).each do |user|
+    begin
+      current_token = refresh_google_token(user) || user.google_token
+      service = Google::Apis::CalendarV3::CalendarService.new
+      service.authorization = current_token
+
+      now = Time.now
+      
+      past_time_limit = now.utc - 60 * 24 * 60 * 60
+      past_logs = AnalysisLog.where(line_user_id: user.line_user_id).where("created_at >= ?", past_time_limit)
+      
+      daily_max_scores = {}
+      past_logs.each do |log|
+        jst_time = log.created_at + (9 * 60 * 60)
+        daily_max_scores[jst_time.strftime("%Y-%m-%d")] = [daily_max_scores[jst_time.strftime("%Y-%m-%d")] || 0, log.yoi_score].max
+      end
+
+      past_events = service.list_events('primary', time_min: past_time_limit.iso8601, time_max: now.utc.iso8601, single_events: true, max_results: 2500).items
+      event_risk_history = {}
+      past_events.each do |event|
+        title = event.summary
+        next if title.nil? || title.empty?
+        
+        date_str = event.start.date_time ? (event.start.date_time.to_time + (9 * 60 * 60)).strftime("%Y-%m-%d") : event.start.date.to_s
+        score = daily_max_scores[date_str] || 0
+        
+        event_risk_history[title.strip] ||= []
+        event_risk_history[title.strip] << score
+      end
+
+      upcoming_events = service.list_events('primary', time_min: now.utc.iso8601, time_max: (now + 60 * 60).utc.iso8601, single_events: true).items
+      
+      upcoming_events.each do |event|
+        next unless event.start.date_time
+        
+        event_time = event.start.date_time.to_time
+        time_diff = event_time - now
+        
+        if time_diff >= 25 * 60 && time_diff <= 35 * 60
+          clean_title = event.summary.strip
+          scores = event_risk_history[clean_title]
+          
+          if scores && scores.any?
+            max_past_score = scores.max
+            
+            if max_past_score >= 80
+              message_text = "【⚠️飲み過ぎ注意⚠️】️\n\n約30分後に「#{clean_title}」\n過去のこの予定では【酔い度 #{max_past_score}%】」\nを記録！🍋\n\n飲み過ぎ注意！！！"
+              
+              client.push_message(user.line_user_id, { type: 'text', text: message_text })
+              puts "🚨 #{user.name}さんに警告LINEを送信しました！"
+            end
+          end
+        end
+      end
+    rescue => e
+      puts "❌ #{user.name} の自動通知チェックでエラー: #{e.message}"
+    end
+  end
+end
+
+get '/delete_test_user' do
+  # 名前が「nomitomo」のユーザーを探して、データベースから完全に削除！
+  User.where(name: "nomitomo").destroy_all
+  
+  "🗑️ nomitomoさんのデータを削除しました！ブラウザの戻るボタンで戻ってください。"
 end

@@ -32,10 +32,12 @@
       
       <div class="bar-column">
         <div class="lemon-stack">
-          <% lemon_count.times do %>
-            <img src="/images/lemon.png" alt="レモン" class="lemon-icon">
-          <% end %>
-        </div>
+  <% lemon_count.times do |i| %>
+    <% random_rotation = rand(-25..25) %>
+    
+    <img src="/images/lemon.png" alt="🍋" class="lemon-icon" style="--rot: <%= random_rotation %>deg; --delay: <%= i * 0.08 %>s;">
+  <% end %>
+</div>
         <span class="day-label"><%= day %></span>
         <span class="score-label"><%= score %>%</span>
       </div>

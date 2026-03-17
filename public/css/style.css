@@ -259,7 +259,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 80px;
+  padding-top: 40px;
   padding-bottom: 80px;
 }
 
@@ -293,7 +293,31 @@ body {
   height: auto !important;
   margin-bottom: -15px;
   filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.3));
-  transition: transform 0.3s ease;
+  /*transition: transform 0.3s ease;*/
+  /*animation: random-shift 0s forwards;*/
+  opacity: 0;
+  transform: translateY(-200px) rotate(var(--rot));
+  
+  /* forwards をつけることで、落ちた状態のままキープさせます */
+animation: drop-lemon 0.4s cubic-bezier(0.34, 1.25, 0.64, 1) forwards;
+animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
+}
+
+@keyframes random-shift {
+  to {
+    transform: translateX(calc(-5px + 10px * (1 + 1) / 2)) !important;
+  }
+}
+
+@keyframes drop-lemon {
+  0% {
+    opacity: 0;
+    transform: translateY(-200px) rotate(calc(var(--rot) - 50deg)); /* 少し余分に回転させておく */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--rot)); /* 本来の角度でピタッと止まる！ */
+  }
 }
 
 .day-label {
@@ -430,7 +454,7 @@ body {
 }
 
 .friend-name {
-  font-size: 1.3rem;
+  font-size: 1.08rem;
   font-weight: bold;
   letter-spacing: 0.5px;
 }
@@ -442,7 +466,7 @@ body {
 }
 
 .friend-score.score-low {
-  color: #FF9F43;
+  color: #06C755;
 }
 
 .btn-invite {
@@ -493,7 +517,7 @@ body {
   font-size: 1.3rem;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   letter-spacing: 1.5px;
 }
 
@@ -651,4 +675,13 @@ body {
     text-align: left;
     font-size: 1.1rem;
   }
+}
+
+/* トップページのロゴ画像用のスタイル */
+.top-logo {
+  width: 230px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 30px;
+  display: block;
 }

@@ -30,3 +30,4 @@ gem 'oauth2', '< 2.0'
 gem 'line-bot-api', '~> 1.29.0'
 source 'https://rubygems.org'
 
+gem 'rufus-scheduler'

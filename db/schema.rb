@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_10_090505) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_17_151733) do
   create_table "analysis_logs", force: :cascade do |t|
     t.string "line_user_id"
     t.text "original_text"
@@ -34,5 +34,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_10_090505) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status", default: "off"
+    t.string "google_token"
+    t.string "google_refresh_token"
   end
 end
