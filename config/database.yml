@@ -1,0 +1,17 @@
+# config/database.yml
+
+# 本番（AWS）用のPostgreSQL共通設定
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+# Cloud9（開発環境）用：今まで通りエラーなく動くSQLiteを指定！
+development:
+  adapter: sqlite3
+  database: yoikagen.sqlite3
+
+# AWS（本番環境）用：環境変数のURLを使ってPostgreSQLに繋ぐ！
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>

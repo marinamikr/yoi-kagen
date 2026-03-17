@@ -7,8 +7,7 @@ require 'openai'
 require 'dotenv/load'
 require 'sinatra/activerecord'
 require 'google/apis/calendar_v3'
-
-set :database, { adapter: "sqlite3", database: "yoikagen.sqlite3" }
+require './models'
 
 enable :sessions
 set :session_secret, '8b4b1a41a4a2c5a2c91c89f5c490a6e344e21a2d48344e99f5a0cfb2e2d9b23f'
@@ -24,15 +23,6 @@ use OmniAuth::Builder do
     scope: 'email, profile, https://www.googleapis.com/auth/calendar.events',
     provider_ignores_state: true
   }
-end
-
-class AnalysisLog < ActiveRecord::Base
-end
-
-class User < ActiveRecord::Base
-end
-
-class Friend < ActiveRecord::Base
 end
 
 

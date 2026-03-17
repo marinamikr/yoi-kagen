@@ -1,23 +1,14 @@
 require 'bundler/setup'
 Bundler.require
 
-ActiveRecord::Base.establish_connection
+db_config = YAML.load(ERB.new(File.read('config/database.yml')).result, aliases: true)
+ActiveRecord::Base.establish_connection(db_config[ENV['RACK_ENV'] || 'development'])
+
+class AnalysisLog < ActiveRecord::Base
+end
 
 class User < ActiveRecord::Base
-  has_secure_password
-  has_many :posts
-  has_many :favorites
-  has_many :favorite_posts, through: :favorites, source: :post
 end
 
-class Post < ActiveRecord::Base
-  belongs_to :user
-  has_many :favorites
-  has_many :favorite_users, through: :favorites, source: :user
+class Friend < ActiveRecord::Base
 end
-
-class Favorite < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :post
-end
-
