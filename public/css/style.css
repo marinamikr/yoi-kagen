@@ -1,8 +1,5 @@
 /* public/css/style.css */
 
-/* ==========================================
-   全体の基本設定
-========================================== */
 body {
   margin: 0;
   padding: 0;
@@ -26,9 +23,7 @@ body {
   background: transparent;
 }
 
-/* ==========================================
-   ヘッダー共通設定
-========================================== */
+
 .header-logo-link {
   text-decoration: none;
   color: #FFFFFF;
@@ -40,9 +35,6 @@ body {
   font-weight: normal;
 }
 
-/* ==========================================
-   📱 スマホ用ヘッダー
-========================================== */
 .header-mobile {
   display: flex;
   justify-content: space-between;
@@ -56,9 +48,6 @@ body {
   justify-content: center;
 }
 
-/* ==========================================
-   💻 PC用ヘッダー（最初は隠しておく）
-========================================== */
 .header-pc {
   display: none; 
   justify-content: space-between;
@@ -117,9 +106,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* ==========================================
-   ハンバーガーメニュー＆オーバーレイ
-========================================== */
+
 .hamburger-icon {
   font-size: 1.8rem;
   cursor: pointer;
@@ -182,9 +169,6 @@ body {
   letter-spacing: 1px;
 }
 
-/* ==========================================
-   トップページ (index.erb)
-========================================== */
 .top-main {
   flex: 1;
   display: flex;
@@ -223,9 +207,7 @@ body {
   opacity: 0.8;
 }
 
-/* ==========================================
-   現在の酔い加減ページ (current.erb)
-========================================== */
+
 .current-page-container {
   flex: 1;
   display: flex;
@@ -252,9 +234,7 @@ body {
   font-weight: bold;
 }
 
-/* ==========================================
-   グラフのレイアウトと巨大化防止！ (week-meter)
-========================================== */
+
 .week-meter-page-container {
   flex: 1;
   display: flex;
@@ -277,7 +257,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50px !important; /* 👈 絶対に50pxの幅に固定！ */
+  width: 50px !important; 
 }
 
 .lemon-stack {
@@ -289,7 +269,7 @@ body {
 }
 
 .lemon-icon {
-  width: 35px !important; /* 👈 絶対に35pxにする魔法！ */
+  width: 35px !important; 
   max-width: 35px !important;
   height: auto !important;
   margin-bottom: -15px;
@@ -299,7 +279,6 @@ body {
   opacity: 0;
   transform: translateY(-200px) rotate(var(--rot));
   
-  /* forwards をつけることで、落ちた状態のままキープさせます */
 animation: drop-lemon 0.4s cubic-bezier(0.34, 1.25, 0.64, 1) forwards;
 animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
 }
@@ -313,11 +292,11 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
 @keyframes drop-lemon {
   0% {
     opacity: 0;
-    transform: translateY(-200px) rotate(calc(var(--rot) - 50deg)); /* 少し余分に回転させておく */
+    transform: translateY(-200px) rotate(calc(var(--rot) - 50deg)); 
   }
   100% {
     opacity: 1;
-    transform: translateY(0) rotate(var(--rot)); /* 本来の角度でピタッと止まる！ */
+    transform: translateY(0) rotate(var(--rot)); 
   }
 }
 
@@ -333,9 +312,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   margin-top: 2px;
 }
 
-/* ==========================================
-   マイページ (mypage.erb)
-========================================== */
 .mypage-container {
   padding: 20px;
   padding-top: 80px;
@@ -421,9 +397,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   transform: scale(1.02);
 }
 
-/* ==========================================
-   友達一覧ページ (friends.erb)
-========================================== */
 .friends-page-container {
   padding: 20px;
   padding-top: 60px;
@@ -490,9 +463,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   opacity: 0.9;
 }
 
-/* ==========================================
-   ダッシュボードページ (dashboard.erb) PC・スマホ対応
-========================================== */
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -533,9 +503,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   font-size: 0.75rem;
 }
 
-/* ==========================================
-   💻 レスポンシブ対応（画面幅900px以上）
-========================================== */
 @media (min-width: 900px) {
   .app-container {
     max-width: 100%; 
@@ -549,7 +516,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
     display: flex; 
   }
 
-  /* マイページのPC対応 */
   .mypage-container {
     padding-top: 100px;
   }
@@ -581,7 +547,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
     width: 250px;
   }
 
-  /* ダッシュボードの横並び設定 */
   .dashboard-container {
     flex-direction: row; 
     align-items: stretch; 
@@ -605,14 +570,12 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   }
 }
 
-/* ==========================================
-   アラート（飲み過ぎ注意）のスタイル
-========================================== */
+
 .alert-card {
   background-color: rgba(255, 75, 43, 0.15);
   border: 2px solid #FF4B2B;
   width: 100%;
-  max-width: 380px; /* スマホで広がりすぎないように */
+  max-width: 380px; 
   box-sizing: border-box;
   margin-bottom: 30px;
 }
@@ -664,7 +627,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   text-align: right;
 }
 
-/* スマホ用の微調整（画面が狭いときは縦並びにする） */
 @media (max-width: 400px) {
   .alert-item {
     flex-direction: column;
@@ -678,7 +640,6 @@ animation-delay: var(--delay); /* ERBで作った時差を読み込む！ */
   }
 }
 
-/* トップページのロゴ画像用のスタイル */
 .top-logo {
   width: 230px;
   max-width: 100%;

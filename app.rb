@@ -14,7 +14,7 @@ require 'net/http'
 enable :sessions
 set :session_secret, '8b4b1a41a4a2c5a2c91c89f5c490a6e344e21a2d48344e99f5a0cfb2e2d9b23f'
 
-OmniAuth.config.full_host = 'https://acrologic-unglobularly-nikolas.ngrok-free.dev'
+OmniAuth.config.full_host = lambda { |env| "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}" }
 OmniAuth.config.allowed_request_methods = [:post, :get]
 OmniAuth.config.silence_get_warning = true
 
